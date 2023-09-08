@@ -537,6 +537,7 @@ static int imgui_SetNextWindowPos(lua_State* L)
     ImGui::SetNextWindowPos(ImVec2(x, y), cond);
     return 0;
 }
+
 static int imgui_GetWindowSize(lua_State* L)
 {
     DM_LUA_STACK_CHECK(L, 2);
@@ -546,6 +547,17 @@ static int imgui_GetWindowSize(lua_State* L)
     lua_pushnumber(L, size.y);
     return 2;
 }
+
+static int imgui_GetWindowContentRegionMax(lua_State* L)
+{
+    DM_LUA_STACK_CHECK(L, 2);
+    imgui_NewFrame();
+    ImVec2 size = ImGui::GetWindowContentRegionMax();
+    lua_pushnumber(L, size.x);
+    lua_pushnumber(L, size.y);
+    return 2;
+}
+
 static int imgui_IsWindowFocused(lua_State* L)
 {
     DM_LUA_STACK_CHECK(L, 1);
@@ -2075,6 +2087,7 @@ static const luaL_reg Module_methods[] =
     {"set_next_window_size", imgui_SetNextWindowSize},
     {"set_next_window_pos", imgui_SetNextWindowPos},
     {"get_window_size", imgui_GetWindowSize},
+    {"get_window_content_region_max", imgui_GetWindowContentRegionMax},
     {"begin_window", imgui_Begin},
     {"end_window", imgui_End},
     {"is_window_focused", imgui_IsWindowFocused},
