@@ -434,6 +434,28 @@ static int imgui_AddInputCharacter(lua_State* L)
 // ----------------------------
 // ----- TREE -----------------
 // ----------------------------
+static int imgui_CollapsingHeader(lua_State* L)
+{
+    DM_LUA_STACK_CHECK(L, 2);
+    imgui_NewFrame();
+    const char* label = luaL_checkstring(L, 1);
+    bool is_visible = true;
+    bool* is_visible_ptr = NULL;
+    if (lua_isboolean(L, 2) && lua_toboolean(L, 2))
+    {
+        is_visible_ptr = &is_visible;
+    }
+    uint32_t flags = 0;
+    if (lua_isnumber(L, 3))
+    {
+        flags = luaL_checkint(L, 3);
+    }
+    bool result = ImGui::CollapsingHeader(label, is_visible_ptr, flags);
+    lua_pushboolean(L, result);
+    lua_pushboolean(L, is_visible);
+    return 2;
+}
+
 static int imgui_TreeNode(lua_State* L)
 {
     DM_LUA_STACK_CHECK(L, 1);
@@ -2130,6 +2152,7 @@ static const luaL_reg Module_methods[] =
     {"close_current_popup", imgui_CloseCurrentPopup},
     {"end_popup", imgui_EndPopup},
 
+    {"collapsing_header", imgui_CollapsingHeader},
     {"tree_node", imgui_TreeNode},
     {"tree_pop", imgui_TreePop},
 

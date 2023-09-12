@@ -545,6 +545,27 @@
 #***** TREE NODE *************************************************************************************
 #*****************************************************************************************************
 
+  - name: collapsing_header
+    type: function
+
+    parameters:
+      - name: label
+        type: string
+      - name: visible
+        type: boolean
+        optional: true
+      - name: flags
+        type: number
+        optional: true
+
+    return:
+      - name: result
+        type: boolean
+      - name: isvisible
+        type: boolean
+
+#*****************************************************************************************************
+
   - name: tree_node
     type: function
 
