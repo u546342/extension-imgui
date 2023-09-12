@@ -1260,7 +1260,13 @@ static int imgui_Selectable(lua_State* L)
     {
         flags = luaL_checkint(L, 3);
     }
-    ImGui::Selectable(text, &selected, flags);
+    ImVec2 size = ImVec2(0.0f, 0.0f);
+    if (lua_isnumber(L, 4) && lua_isnumber(L, 5))
+    {
+        size.x = luaL_checknumber(L, 4);
+        size.y = luaL_checknumber(L, 5);
+    }
+    ImGui::Selectable(text, &selected, flags, size);
     lua_pushboolean(L, selected);
     return 1;
 }

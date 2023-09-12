@@ -834,8 +834,16 @@
         type: string
       - name: selected
         type: boolean
+        optional: true
       - name: flags
         type: number
+        optional: true
+      - name: width
+        type: number
+        optional: true
+      - name: height
+        type: number
+        optional: true
 
     return:
       - name: selected
