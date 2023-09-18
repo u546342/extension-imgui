@@ -501,6 +501,25 @@ static int imgui_PopId(lua_State* L)
 
 
 // ----------------------------
+// --- Push/Pop Item Width ----
+// ----------------------------
+static int imgui_PushItemWidth(lua_State* L)
+{
+    DM_LUA_STACK_CHECK(L, 0);
+    float width = luaL_checknumber(L, 1);
+    ImGui::PushItemWidth(width);
+    return 0;
+}
+
+static int imgui_PopItemWidth(lua_State* L)
+{
+    DM_LUA_STACK_CHECK(L, 0);
+    ImGui::PopItemWidth();
+    return 0;
+}
+
+
+// ----------------------------
 // ----- WINDOW ---------------
 // ----------------------------
 static int imgui_Begin(lua_State* L)
@@ -2164,6 +2183,9 @@ static const luaL_reg Module_methods[] =
 
     {"push_id", imgui_PushId},
     {"pop_id", imgui_PopId},
+
+    {"push_item_width", imgui_PushItemWidth},
+    {"pop_item_width", imgui_PopItemWidth},
 
     {"selectable", imgui_Selectable},
     {"text", imgui_Text},
