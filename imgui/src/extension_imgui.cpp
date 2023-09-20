@@ -236,7 +236,6 @@ static int imgui_ImageAdd( lua_State *L )
     GLuint tid = (GLuint)luaL_checkinteger(L, 1);
     int w = luaL_checknumber(L, 2);
     int h = luaL_checknumber(L, 3);
-
     ImVec2 uv0 = ImVec2(0, 0);
     if (lua_isnumber(L, 4) && lua_isnumber(L, 5)) {
         uv0.x = luaL_checknumber(L, 4);
@@ -247,7 +246,14 @@ static int imgui_ImageAdd( lua_State *L )
         uv1.x = luaL_checknumber(L, 6);
         uv1.y = luaL_checknumber(L, 7);
     }
-    ImGui::Image((void*)(intptr_t)tid, ImVec2(w, h), uv0, uv1);
+    ImVec4 tint_col = ImVec4(1, 1, 1, 1);
+    if (lua_isnumber(L, 8) && lua_isnumber(L, 9) && lua_isnumber(L, 10) and lua_isnumber(L, 11)) {
+        tint_col.x = luaL_checknumber(L, 8);
+        tint_col.y = luaL_checknumber(L, 9);
+        tint_col.z = luaL_checknumber(L, 10);
+        tint_col.w = luaL_checknumber(L, 11);
+    }
+    ImGui::Image((void*)(intptr_t)tid, ImVec2(w, h), uv0, uv1, tint_col);
     return 0;
 }
 

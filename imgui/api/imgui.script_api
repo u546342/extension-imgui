@@ -145,6 +145,14 @@
         type: number
       - name: uv1y
         type: number
+      - name: tint_r
+        type: number
+      - name: tint_g
+        type: number
+      - name: tint_b
+        type: number
+      - name: tint_a
+        type: number
 
 #*****************************************************************************************************
 
