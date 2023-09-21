@@ -1463,6 +1463,33 @@
 
 #*****************************************************************************************************
 
+  - name: set_style_child_rounding
+    type: function
+
+    parameters:
+      - name: rounding
+        type: number
+
+#*****************************************************************************************************
+
+  - name: set_style_grab_rounding
+    type: function
+
+    parameters:
+      - name: rounding
+        type: number
+
+#*****************************************************************************************************
+
+  - name: set_style_popup_rounding
+    type: function
+
+    parameters:
+      - name: rounding
+        type: number
+
+#*****************************************************************************************************
+
   - name: set_style_color
     type: function
 

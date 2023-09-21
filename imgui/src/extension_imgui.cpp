@@ -1725,6 +1725,31 @@ static int imgui_SetStyleScrollbarRounding(lua_State* L)
     style.ScrollbarRounding = luaL_checknumber(L, 1);
     return 0;
 }
+
+static int imgui_SetStyleChildRounding(lua_State* L)
+{
+    DM_LUA_STACK_CHECK(L, 0);
+    ImGuiStyle& style = ImGui::GetStyle();
+    style.ChildRounding = luaL_checknumber(L, 1);
+    return 0;
+}
+
+static int imgui_SetStyleGrabRounding(lua_State* L)
+{
+    DM_LUA_STACK_CHECK(L, 0);
+    ImGuiStyle& style = ImGui::GetStyle();
+    style.GrabRounding = luaL_checknumber(L, 1);
+    return 0;
+}
+
+static int imgui_SetStylePopupRounding(lua_State* L)
+{
+    DM_LUA_STACK_CHECK(L, 0);
+    ImGuiStyle& style = ImGui::GetStyle();
+    style.PopupRounding = luaL_checknumber(L, 1);
+    return 0;
+}
+
 static int imgui_SetStyleColor(lua_State* L)
 {
     DM_LUA_STACK_CHECK(L, 0);
@@ -2266,6 +2291,9 @@ static const luaL_reg Module_methods[] =
     {"set_style_frame_rounding", imgui_SetStyleFrameRounding},
     {"set_style_tab_rounding", imgui_SetStyleTabRounding},
     {"set_style_scrollbar_rounding", imgui_SetStyleScrollbarRounding},
+    {"set_style_child_rounding", imgui_SetStyleChildRounding},
+    {"set_style_grab_rounding", imgui_SetStyleGrabRounding},
+    {"set_style_popup_rounding", imgui_SetStylePopupRounding},
     {"set_style_color", imgui_SetStyleColor},
     {"push_style_color", imgui_PushStyleColor},
     {"pop_style_color", imgui_PopStyleColor},
