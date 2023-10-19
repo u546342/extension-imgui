@@ -898,6 +898,28 @@
 
 #*****************************************************************************************************
 
+  - name: invisible_button
+    type: function
+
+    parameters:
+      - name: str_id
+        type: string
+      - name: width
+        type: number
+        optional: true
+      - name: height
+        type: number
+        optional: true
+      - name: flags
+        type: number
+        optional: true
+
+    return:
+      - name: pushed
+        type: boolean
+
+#*****************************************************************************************************
+
   - name: button_image
     type: function
 
@@ -1338,7 +1360,6 @@
 
 #*****************************************************************************************************
 
-
   - name: is_mouse_clicked
     type: function
 
@@ -1348,6 +1369,19 @@
 
     return:
       - name: clicked
+        type: boolean
+
+#*****************************************************************************************************
+
+  - name: is_mouse_down
+    type: function
+
+    parameters:
+      - name: button
+        type: number
+
+    return:
+      - name: down
         type: boolean
 
 #*****************************************************************************************************

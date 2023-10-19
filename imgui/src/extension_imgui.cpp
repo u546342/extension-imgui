@@ -1327,6 +1327,27 @@ static int imgui_Button(lua_State* L)
     return 1;
 }
 
+static int imgui_InvisibleButton(lua_State* L)
+{
+    DM_LUA_STACK_CHECK(L, 1);
+    imgui_NewFrame();
+    const char* str_id = luaL_checkstring(L, 1);
+    ImVec2 size = ImVec2(0.0f, 0.0f);
+    if (lua_isnumber(L, 2) && lua_isnumber(L, 3))
+    {
+        size.x = luaL_checknumber(L, 2);
+        size.y = luaL_checknumber(L, 3);
+    }
+    uint32_t flags = 0;
+    if (lua_isnumber(L, 4))
+    {
+        flags = luaL_checkint(L, 4);
+    }
+    bool pushed = ImGui::InvisibleButton(str_id, size, flags);
+    lua_pushboolean(L, pushed);
+    return 1;
+}
+
 static int imgui_ButtonImage(lua_State* L)
 {
     DM_LUA_STACK_CHECK(L, 1);
@@ -1609,6 +1630,7 @@ static int imgui_Demo(lua_State* L)
 // ----------------------------
 // ----- INPUT ----------------
 // ----------------------------
+
 static int imgui_IsMouseDoubleClicked(lua_State* L)
 {
     DM_LUA_STACK_CHECK(L, 1);
@@ -1625,6 +1647,16 @@ static int imgui_IsMouseClicked(lua_State* L)
     imgui_NewFrame();
     uint32_t button = luaL_checknumber(L, 1);
     bool clicked = ImGui::IsMouseClicked(button);
+    lua_pushboolean(L, clicked);
+    return 1;
+}
+
+static int imgui_IsMouseDown(lua_State* L)
+{
+    DM_LUA_STACK_CHECK(L, 1);
+    imgui_NewFrame();
+    uint32_t button = luaL_checknumber(L, 1);
+    bool clicked = ImGui::IsMouseDown(button);
     lua_pushboolean(L, clicked);
     return 1;
 }
@@ -2231,6 +2263,7 @@ static const luaL_reg Module_methods[] =
     {"slider_float", imgui_SliderFloat},
     {"small_button", imgui_SmallButton},
     {"button", imgui_Button},
+    {"invisible_button", imgui_InvisibleButton},
     {"button_image", imgui_ButtonImage},
     {"checkbox", imgui_Checkbox},
     {"begin_menu_bar", imgui_BeginMenuBar},
@@ -2283,6 +2316,7 @@ static const luaL_reg Module_methods[] =
     {"is_item_double_clicked", imgui_IsItemDoubleClicked},
     {"is_item_hovered", imgui_IsItemHovered},
     {"is_mouse_clicked", imgui_IsMouseClicked},
+    {"is_mouse_down", imgui_IsMouseDown},
     {"is_mouse_double_clicked", imgui_IsMouseDoubleClicked},
 
     {"set_style_window_rounding", imgui_SetStyleWindowRounding},
