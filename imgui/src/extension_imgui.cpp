@@ -1539,7 +1539,6 @@ static int imgui_Separator(lua_State* L)
 static int imgui_GetCursorPos(lua_State* L)
 {
     DM_LUA_STACK_CHECK(L, 2);
-
     ImVec2 p = ImGui::GetCursorPos();
     lua_pushnumber(L, p.x);
     lua_pushnumber(L, p.y);
@@ -1651,6 +1650,16 @@ static int imgui_IsMouseClicked(lua_State* L)
     return 1;
 }
 
+static int imgui_IsMouseReleased(lua_State* L)
+{
+    DM_LUA_STACK_CHECK(L, 1);
+    imgui_NewFrame();
+    uint32_t button = luaL_checknumber(L, 1);
+    bool clicked = ImGui::IsMouseReleased(button);
+    lua_pushboolean(L, clicked);
+    return 1;
+}
+
 static int imgui_IsMouseDown(lua_State* L)
 {
     DM_LUA_STACK_CHECK(L, 1);
@@ -1659,6 +1668,15 @@ static int imgui_IsMouseDown(lua_State* L)
     bool clicked = ImGui::IsMouseDown(button);
     lua_pushboolean(L, clicked);
     return 1;
+}
+
+static int imgui_GetMousePos(lua_State* L)
+{
+    DM_LUA_STACK_CHECK(L, 2);
+    ImVec2 p = ImGui::GetMousePos();
+    lua_pushnumber(L, p.x);
+    lua_pushnumber(L, p.y);
+    return 2;
 }
 
 static int imgui_IsItemActive(lua_State* L)
@@ -2316,7 +2334,9 @@ static const luaL_reg Module_methods[] =
     {"is_item_double_clicked", imgui_IsItemDoubleClicked},
     {"is_item_hovered", imgui_IsItemHovered},
     {"is_mouse_clicked", imgui_IsMouseClicked},
+    {"is_mouse_released", imgui_IsMouseReleased},
     {"is_mouse_down", imgui_IsMouseDown},
+    {"get_mouse_pos", imgui_GetMousePos},
     {"is_mouse_double_clicked", imgui_IsMouseDoubleClicked},
 
     {"set_style_window_rounding", imgui_SetStyleWindowRounding},
