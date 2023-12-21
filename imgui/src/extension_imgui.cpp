@@ -43,7 +43,7 @@ static char* g_imgui_TextBuffer     = 0;
 static dmArray<ImFont*> g_imgui_Fonts;
 static dmArray<ImgObject> g_imgui_Images;
 static bool g_VerifyGraphicsCalls   = false;
-
+static bool g_RenderingEnabled      = true;
 
 
 static void imgui_ClearGLError()
@@ -505,26 +505,6 @@ static int imgui_PopId(lua_State* L)
     return 0;
 }
 
-
-// ----------------------------
-// --- Push/Pop Item Width ----
-// ----------------------------
-static int imgui_PushItemWidth(lua_State* L)
-{
-    DM_LUA_STACK_CHECK(L, 0);
-    float width = luaL_checknumber(L, 1);
-    ImGui::PushItemWidth(width);
-    return 0;
-}
-
-static int imgui_PopItemWidth(lua_State* L)
-{
-    DM_LUA_STACK_CHECK(L, 0);
-    ImGui::PopItemWidth();
-    return 0;
-}
-
-
 // ----------------------------
 // ----- WINDOW ---------------
 // ----------------------------
@@ -595,13 +575,13 @@ static int imgui_GetWindowSize(lua_State* L)
     return 2;
 }
 
-static int imgui_GetWindowContentRegionMax(lua_State* L)
+static int imgui_GetWindowPos(lua_State* L)
 {
     DM_LUA_STACK_CHECK(L, 2);
     imgui_NewFrame();
-    ImVec2 size = ImGui::GetWindowContentRegionMax();
-    lua_pushnumber(L, size.x);
-    lua_pushnumber(L, size.y);
+    ImVec2 pos = ImGui::GetWindowPos();
+    lua_pushnumber(L, pos.x);
+    lua_pushnumber(L, pos.y);
     return 2;
 }
 
@@ -619,6 +599,25 @@ static int imgui_IsWindowFocused(lua_State* L)
     return 1;
 }
 
+static int imgui_GetContentRegionAvail(lua_State* L)
+{
+    DM_LUA_STACK_CHECK(L, 2);
+    imgui_NewFrame();
+    ImVec2 region = ImGui::GetContentRegionAvail();
+    lua_pushnumber(L, region.x);
+    lua_pushnumber(L, region.y);
+    return 2;
+}
+
+static int imgui_GetWindowContentRegionMax(lua_State* L)
+{
+    DM_LUA_STACK_CHECK(L, 2);
+    imgui_NewFrame();
+    ImVec2 region = ImGui::GetWindowContentRegionMax();
+    lua_pushnumber(L, region.x);
+    lua_pushnumber(L, region.y);
+    return 2;
+}
 
 // ----------------------------
 // ----- CHILD WINDOW ---------
@@ -1381,6 +1380,18 @@ static int imgui_Checkbox(lua_State* L)
     return 2;
 }
 
+static int imgui_RadioButton(lua_State* L)
+{
+    DM_LUA_STACK_CHECK(L, 2);
+    imgui_NewFrame();
+    const char* text = luaL_checkstring(L, 1);
+    bool checked = lua_toboolean(L, 2);
+    bool changed = ImGui::RadioButton(text, checked);
+    lua_pushboolean(L, changed);
+    lua_pushboolean(L, checked);
+    return 2;
+}
+
 static int imgui_BeginMenuBar(lua_State* L)
 {
     DM_LUA_STACK_CHECK(L, 1);
@@ -1727,6 +1738,25 @@ static int imgui_IsItemHovered(lua_State* L)
     return 1;
 }
 
+static int imgui_GetItemRectMax(lua_State* L)
+{
+    DM_LUA_STACK_CHECK(L, 2);
+    imgui_NewFrame();
+    ImVec2 rect = ImGui::GetItemRectMax();
+    lua_pushnumber(L, rect.x);
+    lua_pushnumber(L, rect.y);
+    return 2;
+}
+
+static int imgui_SetKeyboardFocusHere(lua_State* L)
+{
+    DM_LUA_STACK_CHECK(L, 0);
+    imgui_NewFrame();
+    int offset = luaL_checknumber(L, 1);
+    ImGui::SetKeyboardFocusHere(offset);
+    return 0;
+}
+
 // ----------------------------
 // ----- STYLE ----------------
 // ----------------------------
@@ -1800,6 +1830,14 @@ static int imgui_SetStylePopupRounding(lua_State* L)
     return 0;
 }
 
+static int imgui_SetStyleScrollbarSize(lua_State* L)
+{
+    DM_LUA_STACK_CHECK(L, 0);
+    ImGuiStyle& style = ImGui::GetStyle();
+    style.ScrollbarSize = luaL_checknumber(L, 1);
+    return 0;
+}
+
 static int imgui_SetStyleColor(lua_State* L)
 {
     DM_LUA_STACK_CHECK(L, 0);
@@ -1833,7 +1871,15 @@ static int imgui_PopStyleColor(lua_State* L)
     ImGui::PopStyleColor(count);
     return 0;
 }
-
+static int imgui_GetStyleItemSpacing(lua_State* L)
+{
+    DM_LUA_STACK_CHECK(L, 2);
+    ImGuiStyle& style = ImGui::GetStyle();
+    ImVec2 spacing = style.ItemSpacing;
+    lua_pushnumber(L, spacing.x);
+    lua_pushnumber(L, spacing.y);
+    return 2;
+}
 static int imgui_SetWindowFontScale(lua_State *L)
 {
     DM_LUA_STACK_CHECK(L, 0);
@@ -1871,6 +1917,40 @@ static int imgui_SetCursorPos(lua_State *L)
     return 0;
 }
 
+// ----------------------------
+// ----- ITEM WIDTH -----------
+// ----------------------------
+
+static int imgui_PushItemWidth(lua_State *L)
+{
+    DM_LUA_STACK_CHECK(L, 0);
+    float width = luaL_checknumber(L, 1);
+    ImGui::PushItemWidth(width);
+    return 0;
+}
+
+static int imgui_PopItemWidth(lua_State *L)
+{
+    DM_LUA_STACK_CHECK(L, 0);
+    ImGui::PopItemWidth();
+    return 0;
+}
+
+static int imgui_SetNextItemWidth(lua_State *L)
+{
+    DM_LUA_STACK_CHECK(L, 0);
+    float width = luaL_checknumber(L, 1);
+    ImGui::SetNextItemWidth(width);
+    return 0;
+}
+
+static int imgui_CalcItemWidth(lua_State *L)
+{
+    DM_LUA_STACK_CHECK(L, 1);
+    float width = ImGui::CalcItemWidth();
+    lua_pushnumber(L, width);
+    return 1;
+}
 
 // ----------------------------
 // ----- NAVIGATION -----------------
@@ -2009,7 +2089,12 @@ static dmExtension::Result imgui_Draw(dmExtension::Params* params)
 {
     imgui_NewFrame();
     ImGui::Render();
-    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+    if (g_RenderingEnabled)
+    {
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+    }
+    
     imgui_ClearGLError();
 
     g_imgui_NewFrame = false;
@@ -2070,6 +2155,14 @@ static int imgui_DrawProgressBar(lua_State* L)
 
     ImVec2 size_param(xsize, ysize);
     ImGui::ProgressBar(progress, size_param);
+    return 0;
+}
+
+static int imgui_SetRenderingEnabled(lua_State* L)
+{
+    DM_LUA_STACK_CHECK(L, 0);
+    bool enabled = lua_toboolean(L, 1);
+    g_RenderingEnabled = enabled;
     return 0;
 }
 
@@ -2215,10 +2308,12 @@ static const luaL_reg Module_methods[] =
     {"set_next_window_size", imgui_SetNextWindowSize},
     {"set_next_window_pos", imgui_SetNextWindowPos},
     {"get_window_size", imgui_GetWindowSize},
-    {"get_window_content_region_max", imgui_GetWindowContentRegionMax},
+    {"get_window_pos", imgui_GetWindowPos},
     {"begin_window", imgui_Begin},
     {"end_window", imgui_End},
     {"is_window_focused", imgui_IsWindowFocused},
+    {"get_content_region_avail", imgui_GetContentRegionAvail},
+    {"get_window_content_region_max", imgui_GetWindowContentRegionMax},
 
     {"begin_child", imgui_BeginChild},
     {"end_child", imgui_EndChild},
@@ -2265,9 +2360,6 @@ static const luaL_reg Module_methods[] =
     {"push_id", imgui_PushId},
     {"pop_id", imgui_PopId},
 
-    {"push_item_width", imgui_PushItemWidth},
-    {"pop_item_width", imgui_PopItemWidth},
-
     {"selectable", imgui_Selectable},
     {"text", imgui_Text},
     {"text_colored", imgui_TextColored},
@@ -2284,6 +2376,7 @@ static const luaL_reg Module_methods[] =
     {"invisible_button", imgui_InvisibleButton},
     {"button_image", imgui_ButtonImage},
     {"checkbox", imgui_Checkbox},
+    {"radio_button", imgui_RadioButton},
     {"begin_menu_bar", imgui_BeginMenuBar},
     {"end_menu_bar", imgui_EndMenuBar},
     {"begin_main_menu_bar", imgui_BeginMainMenuBar},
@@ -2314,7 +2407,7 @@ static const luaL_reg Module_methods[] =
     {"draw_rect_filled", imgui_DrawRectFilled},
     {"draw_line", imgui_DrawLine},
     {"draw_progress", imgui_DrawProgressBar},
-
+    {"set_rendering_enabled", imgui_SetRenderingEnabled},
     {"demo", imgui_Demo},
 
     {"set_mouse_input", imgui_SetMouseInput},
@@ -2333,11 +2426,13 @@ static const luaL_reg Module_methods[] =
     {"is_item_clicked", imgui_IsItemClicked},
     {"is_item_double_clicked", imgui_IsItemDoubleClicked},
     {"is_item_hovered", imgui_IsItemHovered},
+    {"get_item_rect_max", imgui_GetItemRectMax},
     {"is_mouse_clicked", imgui_IsMouseClicked},
     {"is_mouse_released", imgui_IsMouseReleased},
     {"is_mouse_down", imgui_IsMouseDown},
     {"get_mouse_pos", imgui_GetMousePos},
     {"is_mouse_double_clicked", imgui_IsMouseDoubleClicked},
+    {"set_keyboard_focus_here", imgui_SetKeyboardFocusHere},
 
     {"set_style_window_rounding", imgui_SetStyleWindowRounding},
     {"set_style_window_bordersize", imgui_SetStyleWindowBorderSize},
@@ -2348,10 +2443,17 @@ static const luaL_reg Module_methods[] =
     {"set_style_child_rounding", imgui_SetStyleChildRounding},
     {"set_style_grab_rounding", imgui_SetStyleGrabRounding},
     {"set_style_popup_rounding", imgui_SetStylePopupRounding},
+    {"set_style_scrollbar_size", imgui_SetStyleScrollbarSize},
     {"set_style_color", imgui_SetStyleColor},
     {"push_style_color", imgui_PushStyleColor},
     {"pop_style_color", imgui_PopStyleColor},
+    {"get_style_item_spacing", imgui_GetStyleItemSpacing},
 
+    {"push_item_width", imgui_PushItemWidth},
+    {"pop_item_width", imgui_PopItemWidth},
+    {"set_next_item_width", imgui_SetNextItemWidth},
+    {"calc_item_width", imgui_CalcItemWidth},
+    
     {"set_defaults", imgui_SetDefaults},
     {"set_ini_filename", imgui_SetIniFilename},
 
