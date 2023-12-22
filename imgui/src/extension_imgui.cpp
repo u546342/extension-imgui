@@ -89,10 +89,7 @@ static int imgui_ImageInternalLoad(const char *filename, ImgObject *image)
         return 0;
     }
 
-    dmLogInfo("imgui_ImageInternalLoad before %d", image->tid);
-
     glGenTextures(1, &image->tid);
-    dmLogInfo("imgui_ImageInternalLoad after %d", image->tid);
     glBindTexture(GL_TEXTURE_2D, image->tid);
 
     strcpy(image->name, filename);
@@ -165,7 +162,6 @@ static int imgui_ImageLoad(lua_State* L)
 {
     DM_LUA_STACK_CHECK(L, 3);
     const char * filename = luaL_checkstring(L, 1);
-    dmLogInfo("imgui_ImageLoad %s", filename);
     ImgObject image;
 
     // If its already in the vector, return the id
@@ -2268,8 +2264,6 @@ static void imgui_Init(float width, float height)
 
 static void imgui_Shutdown()
 {
-    dmLogInfo("imgui_Shutdown");
-
     ImGui_ImplOpenGL3_Shutdown();
     imgui_ClearGLError();
     ImGuiIO& io = ImGui::GetIO();
@@ -2792,7 +2786,6 @@ dmExtension::Result AppFinalizeDefoldImGui(dmExtension::AppParams* params)
 
 dmExtension::Result FinalizeDefoldImGui(dmExtension::Params* params)
 {
-    dmLogInfo("FinalizeDefoldImGui");
     imgui_Shutdown();
     imgui_ExtensionShutdown();
     return dmExtension::RESULT_OK;
