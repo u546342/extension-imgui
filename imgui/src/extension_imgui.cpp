@@ -2010,7 +2010,7 @@ static int imgui_FontAddTTFFile(lua_State * L)
     return 1;
 }
 
-static int imgui_FontAddTTFData(lua_State * L)
+static int imgui_FontAddTTFData(lua_State *L)
 {
     DM_LUA_STACK_CHECK(L, 1);
     const char * ttf_data = luaL_checkstring(L, 1);
@@ -2036,9 +2036,18 @@ static int imgui_FontAddTTFData(lua_State * L)
     return 1;
 }
 
+static int imgui_ReCreateFontsTexture(lua_State *L)
+{
+    DM_LUA_STACK_CHECK(L, 0);
+    ImGui_ImplOpenGL3_DestroyFontsTexture();
+    ImGui_ImplOpenGL3_CreateFontsTexture();
+    return 0;
+}
+
 static int imgui_FontPush(lua_State *L)
 {
     DM_LUA_STACK_CHECK(L, 0);
+    imgui_NewFrame();
     int fontid = luaL_checkinteger(L, 1);
     ImFont* font = imgui_GetFont(fontid);
     if (font)
@@ -2308,6 +2317,7 @@ static const luaL_reg Module_methods[] =
 
     {"font_add_ttf_file", imgui_FontAddTTFFile},
     {"font_add_ttf_data", imgui_FontAddTTFData},
+    {"recreate_fonts_texture", imgui_ReCreateFontsTexture},
     {"font_push", imgui_FontPush},
     {"font_pop", imgui_FontPop},
     {"font_scale", imgui_FontScale},
