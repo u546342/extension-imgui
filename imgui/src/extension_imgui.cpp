@@ -1734,6 +1734,16 @@ static int imgui_IsItemHovered(lua_State* L)
     return 1;
 }
 
+static int imgui_GetItemRectMin(lua_State* L)
+{
+    DM_LUA_STACK_CHECK(L, 2);
+    imgui_NewFrame();
+    ImVec2 rect = ImGui::GetItemRectMin();
+    lua_pushnumber(L, rect.x);
+    lua_pushnumber(L, rect.y);
+    return 2;
+}
+
 static int imgui_GetItemRectMax(lua_State* L)
 {
     DM_LUA_STACK_CHECK(L, 2);
@@ -1741,6 +1751,16 @@ static int imgui_GetItemRectMax(lua_State* L)
     ImVec2 rect = ImGui::GetItemRectMax();
     lua_pushnumber(L, rect.x);
     lua_pushnumber(L, rect.y);
+    return 2;
+}
+
+static int imgui_GetItemRectSize(lua_State* L)
+{
+    DM_LUA_STACK_CHECK(L, 2);
+    imgui_NewFrame();
+    ImVec2 size = ImGui::GetItemRectSize();
+    lua_pushnumber(L, size.x);
+    lua_pushnumber(L, size.y);
     return 2;
 }
 
@@ -2438,7 +2458,9 @@ static const luaL_reg Module_methods[] =
     {"is_item_clicked", imgui_IsItemClicked},
     {"is_item_double_clicked", imgui_IsItemDoubleClicked},
     {"is_item_hovered", imgui_IsItemHovered},
+    {"get_item_rect_min", imgui_GetItemRectMin},
     {"get_item_rect_max", imgui_GetItemRectMax},
+    {"get_item_rect_size", imgui_GetItemRectSize},
     {"is_mouse_clicked", imgui_IsMouseClicked},
     {"is_mouse_released", imgui_IsMouseReleased},
     {"is_mouse_down", imgui_IsMouseDown},

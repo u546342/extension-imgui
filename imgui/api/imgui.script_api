@@ -1513,7 +1513,29 @@
 
 #*****************************************************************************************************
 
+  - name: get_item_rect_min
+    type: function
+
+    return:
+      - name: x
+        type: number
+      - name: y
+        type: number
+
+#*****************************************************************************************************
+
   - name: get_item_rect_max
+    type: function
+
+    return:
+      - name: x
+        type: number
+      - name: y
+        type: number
+
+#*****************************************************************************************************
+
+  - name: get_item_rect_size
     type: function
 
     return:
