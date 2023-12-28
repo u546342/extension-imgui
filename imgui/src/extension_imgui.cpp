@@ -1800,6 +1800,7 @@ static int imgui_SetStyleWindowRounding(lua_State* L)
     style.WindowRounding = luaL_checknumber(L, 1);
     return 0;
 }
+
 static int imgui_SetStyleFrameRounding(lua_State* L)
 {
     DM_LUA_STACK_CHECK(L, 0);
@@ -1807,6 +1808,7 @@ static int imgui_SetStyleFrameRounding(lua_State* L)
     style.FrameRounding = luaL_checknumber(L, 1);
     return 0;
 }
+
 static int imgui_SetStyleTabRounding(lua_State* L)
 {
     DM_LUA_STACK_CHECK(L, 0);
@@ -1814,6 +1816,7 @@ static int imgui_SetStyleTabRounding(lua_State* L)
     style.TabRounding = luaL_checknumber(L, 1);
     return 0;
 }
+
 static int imgui_SetStyleScrollbarRounding(lua_State* L)
 {
     DM_LUA_STACK_CHECK(L, 0);
@@ -1865,6 +1868,7 @@ static int imgui_SetStyleColor(lua_State* L)
     style.Colors[luaL_checkinteger(L, 1)] = ImVec4(r, g, b, a);
     return 0;
 }
+
 static int imgui_PushStyleColor(lua_State* L)
 {
     DM_LUA_STACK_CHECK(L, 0);
@@ -1876,6 +1880,7 @@ static int imgui_PushStyleColor(lua_State* L)
     ImGui::PushStyleColor(col, ImVec4(r, g, b, a));
     return 0;
 }
+
 static int imgui_PopStyleColor(lua_State* L)
 {
     DM_LUA_STACK_CHECK(L, 0);
@@ -1887,6 +1892,7 @@ static int imgui_PopStyleColor(lua_State* L)
     ImGui::PopStyleColor(count);
     return 0;
 }
+
 static int imgui_GetStyleItemSpacing(lua_State* L)
 {
     DM_LUA_STACK_CHECK(L, 2);
@@ -1896,6 +1902,7 @@ static int imgui_GetStyleItemSpacing(lua_State* L)
     lua_pushnumber(L, spacing.y);
     return 2;
 }
+
 static int imgui_SetWindowFontScale(lua_State *L)
 {
     DM_LUA_STACK_CHECK(L, 0);
@@ -1922,6 +1929,12 @@ static int imgui_ScaleAllSizes(lua_State *L)
     return 0;
 }
 
+static int imgui_ResetStyle(lua_State *L)
+{
+    DM_LUA_STACK_CHECK(L, 0);
+    ImGui::GetStyle() = ImGuiStyle();
+    return 0;
+}
 
 static int imgui_SetCursorPos(lua_State *L)
 {
@@ -2496,6 +2509,7 @@ static const luaL_reg Module_methods[] =
     {"set_window_font_scale", imgui_SetWindowFontScale},
     {"set_global_font_scale", imgui_SetGlobalFontScale},
     {"scale_all_sizes", imgui_ScaleAllSizes},
+    {"reset_style", imgui_ResetStyle},
 
     {"get_frame_height", imgui_GetFrameHeight},
 
