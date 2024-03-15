@@ -753,6 +753,81 @@
 
 #*****************************************************************************************************
 
+  - name: input_int2
+    type: function
+
+    parameters:
+      - name: label
+        type: string
+      - name: v1
+        type: number
+      - name: v2
+        type: number
+
+    return:
+      - name: changed
+        type: boolean
+      - name: v1
+        type: number
+      - name: v2
+        type: number
+
+#*****************************************************************************************************
+
+  - name: input_int3
+    type: function
+
+    parameters:
+      - name: label
+        type: string
+      - name: v1
+        type: number
+      - name: v2
+        type: number
+      - name: v3
+        type: number
+
+    return:
+      - name: changed
+        type: boolean
+      - name: v1
+        type: number
+      - name: v2
+        type: number
+      - name: v3
+        type: number
+
+#*****************************************************************************************************
+
+  - name: input_int4
+    type: function
+
+    parameters:
+      - name: label
+        type: string
+      - name: v1
+        type: number
+      - name: v2
+        type: number
+      - name: v3
+        type: number
+      - name: v4
+        type: number
+
+    return:
+      - name: changed
+        type: boolean
+      - name: v1
+        type: number
+      - name: v2
+        type: number
+      - name: v3
+        type: number
+      - name: v4
+        type: number
+
+#*****************************************************************************************************
+
   - name: input_float
     type: function
 

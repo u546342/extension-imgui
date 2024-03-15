@@ -1186,6 +1186,57 @@ static int imgui_InputDouble(lua_State* L)
     return 2;
 }
 
+static int imgui_InputInt2(lua_State* L)
+{
+    DM_LUA_STACK_CHECK(L, 3);
+    imgui_NewFrame();
+    const char* label = luaL_checkstring(L, 1);
+    int v[2];
+    v[0]  = luaL_checkinteger(L, 2);
+    v[1]  = luaL_checkinteger(L, 3);
+
+    bool changed = ImGui::InputInt2(label, v);
+    lua_pushboolean(L, changed);
+    if (changed)
+    {
+        lua_pushnumber(L, v[0]);
+        lua_pushnumber(L, v[1]);
+    }
+    else
+    {
+        lua_pushnil(L);
+        lua_pushnil(L);
+    }
+    return 3;
+}
+
+static int imgui_InputInt3(lua_State* L)
+{
+    DM_LUA_STACK_CHECK(L, 4);
+    imgui_NewFrame();
+    const char* label = luaL_checkstring(L, 1);
+    int v[3];
+    v[0]  = luaL_checkinteger(L, 2);
+    v[1]  = luaL_checkinteger(L, 3);
+    v[2]  = luaL_checkinteger(L, 4);
+
+    bool changed = ImGui::InputInt3(label, v);
+    lua_pushboolean(L, changed);
+    if (changed)
+    {
+        lua_pushnumber(L, v[0]);
+        lua_pushnumber(L, v[1]);
+        lua_pushnumber(L, v[2]);
+    }
+    else
+    {
+        lua_pushnil(L);
+        lua_pushnil(L);
+        lua_pushnil(L);
+    }
+    return 4;
+}
+
 static int imgui_InputInt4(lua_State* L)
 {
     DM_LUA_STACK_CHECK(L, 5);
@@ -1215,7 +1266,6 @@ static int imgui_InputInt4(lua_State* L)
     }
     return 5;
 }
-
 
 static int imgui_InputFloat3(lua_State* L)
 {
@@ -2445,6 +2495,8 @@ static const luaL_reg Module_methods[] =
     {"text_colored", imgui_TextColored},
     {"input_text", imgui_InputText},
     {"input_int", imgui_InputInt},
+    {"input_int2", imgui_InputInt2},
+    {"input_int3", imgui_InputInt3},
     {"input_int4", imgui_InputInt4},
     {"input_float", imgui_InputFloat},
     {"input_double", imgui_InputDouble},
