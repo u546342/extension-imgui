@@ -1371,8 +1371,8 @@ static int imgui_Selectable(lua_State* L)
         size.x = luaL_checknumber(L, 4);
         size.y = luaL_checknumber(L, 5);
     }
-    ImGui::Selectable(text, &selected, flags, size);
-    lua_pushboolean(L, selected);
+    bool result = ImGui::Selectable(text, selected, flags, size);
+    lua_pushboolean(L, result);
     return 1;
 }
 
