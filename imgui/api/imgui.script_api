@@ -965,6 +965,8 @@
         optional: true
 
     return:
+      - name: clicked
+        type: boolean
       - name: selected
         type: boolean
 

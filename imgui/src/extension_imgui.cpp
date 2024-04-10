@@ -1356,7 +1356,7 @@ static int imgui_SliderFloat(lua_State* L)
 
 static int imgui_Selectable(lua_State* L)
 {
-    DM_LUA_STACK_CHECK(L, 1);
+    DM_LUA_STACK_CHECK(L, 2);
     imgui_NewFrame();
     const char* text = luaL_checkstring(L, 1);
     bool selected = lua_toboolean(L, 2);
@@ -1371,9 +1371,10 @@ static int imgui_Selectable(lua_State* L)
         size.x = luaL_checknumber(L, 4);
         size.y = luaL_checknumber(L, 5);
     }
-    bool result = ImGui::Selectable(text, selected, flags, size);
+    bool result = ImGui::Selectable(text, &selected, flags, size);
     lua_pushboolean(L, result);
-    return 1;
+    lua_pushboolean(L, selected);
+    return 2;
 }
 
 static int imgui_SmallButton(lua_State* L)
