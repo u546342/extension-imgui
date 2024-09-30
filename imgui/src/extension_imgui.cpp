@@ -2398,6 +2398,13 @@ static int imgui_FontScale(lua_State *L)
     return 1;
 }
 
+static int imgui_GetFontSize(lua_State *L)
+{
+    DM_LUA_STACK_CHECK(L, 1);
+    lua_pushnumber(L, ImGui::GetFontSize());
+    return 1;
+}
+
 
 static int imgui_GetFrameHeight(lua_State* L)
 {
@@ -2630,6 +2637,7 @@ static const luaL_reg Module_methods[] =
     {"font_push", imgui_FontPush},
     {"font_pop", imgui_FontPop},
     {"font_scale", imgui_FontScale},
+    {"get_font_size", imgui_GetFontSize},
 
     {"set_next_window_size", imgui_SetNextWindowSize},
     {"set_next_window_pos", imgui_SetNextWindowPos},
