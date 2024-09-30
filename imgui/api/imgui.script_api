@@ -887,6 +887,19 @@
 
 #*****************************************************************************************************
 
+  - name: small_button
+    type: function
+
+    parameters:
+      - name: text
+        type: string
+
+    return:
+      - name: pushed
+        type: boolean
+
+#*****************************************************************************************************
+
   - name: button_image
     type: function
 

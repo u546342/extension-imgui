@@ -1330,6 +1330,16 @@ static int imgui_Selectable(lua_State* L)
     return 1;
 }
 
+static int imgui_SmallButton(lua_State* L)
+{
+    DM_LUA_STACK_CHECK(L, 1);
+    imgui_NewFrame();
+    const char* text = luaL_checkstring(L, 1);
+    bool pushed = ImGui::SmallButton(text);
+    lua_pushboolean(L, pushed);
+    return 1;
+}
+
 static int imgui_Button(lua_State* L)
 {
     DM_LUA_STACK_CHECK(L, 1);
@@ -2705,6 +2715,7 @@ static const luaL_reg Module_methods[] =
     {"input_float3", imgui_InputFloat3},
     {"input_float4", imgui_InputFloat4},
     {"slider_float", imgui_SliderFloat},
+    {"small_button", imgui_SmallButton},
     {"button", imgui_Button},
     {"button_image", imgui_ButtonImage},
     {"checkbox", imgui_Checkbox},
