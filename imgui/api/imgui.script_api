@@ -866,6 +866,12 @@
         type: boolean
       - name: flags
         type: number
+      - name: width
+        type: number
+        optional: true
+      - name: height
+        type: number
+        optional: true
 
     return:
       - name: selected
