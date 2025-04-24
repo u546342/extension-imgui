@@ -1753,6 +1753,20 @@ static int imgui_Selectable(lua_State* L)
     return 1;
 }
 
+
+/** SmallButton
+ * @name small_button
+ */
+static int imgui_SmallButton(lua_State* L)
+ {
+    DM_LUA_STACK_CHECK(L, 1);
+    imgui_NewFrame();
+    const char* text = luaL_checkstring(L, 1);
+    bool pushed = ImGui::SmallButton(text);
+    lua_pushboolean(L, pushed);
+    return 1;
+}
+
 /** Button
  * @name button
  */
@@ -2971,6 +2985,15 @@ static int imgui_FontScale(lua_State *L)
     return 1;
 }
 
+/** FontSize
+ * @name get_font_size
+ */
+static int imgui_GetFontSize(lua_State *L)
+ {
+     DM_LUA_STACK_CHECK(L, 1);
+     lua_pushnumber(L, ImGui::GetFontSize());
+     return 1;
+ }
 
 /** GetFrameHeight
  * @name get_frame_height
@@ -3236,6 +3259,7 @@ static const luaL_reg Module_methods[] =
     {"font_push", imgui_FontPush},
     {"font_pop", imgui_FontPop},
     {"font_scale", imgui_FontScale},
+    {"get_font_size", imgui_GetFontSize},
 
     {"set_next_window_size", imgui_SetNextWindowSize},
     {"set_next_window_pos", imgui_SetNextWindowPos},
@@ -3308,6 +3332,7 @@ static const luaL_reg Module_methods[] =
     {"drag_float", imgui_DragFloat},
     {"slider_float", imgui_SliderFloat},
     {"button", imgui_Button},
+    {"small_button", imgui_SmallButton},
     {"button_image", imgui_ButtonImage},
     {"checkbox", imgui_Checkbox},
     {"radio_button", imgui_RadioButton},
